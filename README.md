@@ -4,13 +4,36 @@
   <img alt="DisplayXR" src="doc/displayxr.png" width="120">
 </picture>
 
-# DisplayXR Runtime
+# DisplayXR Runtime — Archived Snapshot
 
-An open-source [OpenXR](https://www.khronos.org/openxr/) runtime for spatial displays — 3D monitors and laptops with tracked stereo and multiview lightfield display technology.
+> **⚠️ This repository is an archived, read-only snapshot.**
+> It preserves the pre-2026 history of the DisplayXR runtime (through
+> release `v1.1.2`, shell code excluded). The instructions below predate
+> the May 2026 changes — the vendor plug-in extraction (ADR-019, Leia SR
+> now ships as a separate plug-in), the shell and MCP framework splits,
+> and the macOS installer. **Don't build from or rely on this snapshot.**
+>
+> - **Active development → [DisplayXR/displayxr-runtime](https://github.com/DisplayXR/displayxr-runtime)**
+> - **Docs, downloads & guides → [displayxr.org](https://displayxr.org)**
 
-Built on [Monado](https://monado.freedesktop.org/) by Collabora, DisplayXR strips away headset-centric infrastructure (34 VR drivers, Vulkan server compositor, tracking subsystems) and replaces it with a lightweight runtime purpose-built for 3D displays: ~150 files, 3 drivers, native compositors for every graphics API.
+---
 
-## Architecture
+## What this snapshot is
+
+An open-source [OpenXR](https://www.khronos.org/openxr/) runtime for
+spatial displays — 3D monitors and laptops with tracked stereo and
+multiview lightfield display technology. Built on
+[Monado](https://monado.freedesktop.org/) by Collabora, it strips away
+headset-centric infrastructure (34 VR drivers, Vulkan server compositor,
+tracking subsystems) and replaces it with a lightweight runtime
+purpose-built for 3D displays: ~150 files, 3 drivers, native compositors
+for every graphics API.
+
+This mirror froze the codebase before the runtime was de-privatized and
+before Leia SR, the shell, and the MCP framework were split into their
+own repos. It is kept for historical reference only.
+
+## Architecture (as of this snapshot)
 
 ```
 App (any graphics API)
@@ -28,71 +51,24 @@ App (any graphics API)
    Display
 ```
 
-Every graphics API gets its own native compositor — no Vulkan intermediary, no interop overhead. Vendor-specific processing (interlacing, lenticular weaving) is isolated in the display processor layer.
+Every graphics API gets its own native compositor — no Vulkan
+intermediary, no interop overhead. Vendor-specific processing
+(interlacing, lenticular weaving) is isolated in the display processor
+layer. *(In the current runtime, vendor display processors such as
+Leia SR ship as out-of-process plug-ins rather than in-tree — see
+ADR-019 in the active repo.)*
 
-| API | Windows | macOS |
-|-----|---------|-------|
-| D3D11 | Shipping | — |
-| D3D12 | Shipping | — |
-| Metal | — | Shipping |
-| OpenGL | Shipping | Shipping |
-| Vulkan | Shipping | Shipping |
+## Where things live now
 
-## Quick Start
-
-```bash
-# macOS
-brew install cmake ninja eigen vulkan-sdk && ./scripts/build_macos.sh
-
-# Windows (with optional vendor SDK)
-set LEIASR_SDKROOT=C:\path\to\SimulatedReality
-mkdir build && cd build && cmake .. -G Ninja && cmake --build .
-
-# Run without installing
-XR_RUNTIME_JSON=./build/openxr_displayxr-dev.json ./your_openxr_app
-```
-
-See [Building DisplayXR](docs/getting-started/building.md) for full instructions and CMake options.
-
-## Simulation Driver
-
-No 3D display required. The **sim_display** driver provides a simulated tracked display with WASD + mouse eye position control:
-
-```bash
-XR_RUNTIME_JSON=./build/openxr_displayxr-dev.json ./build/test_apps/cube_handle_vk_macos/cube_handle_vk_macos
-```
-
-## Documentation
-
-| I want to... | Start here |
+| Looking for… | Go to |
 |---|---|
-| **Build apps** for 3D displays | [Getting Started](docs/getting-started/overview.md) |
-| **Contribute** to DisplayXR | [Contributing Guide](docs/guides/contributing.md) |
-| **Integrate my display** hardware | [Vendor Integration Guide](docs/guides/vendor-integration.md) |
-| See the full docs index | [Documentation Index](docs/README.md) |
-| See the project roadmap | [Roadmap](docs/roadmap/overview.md) |
-
-### Key References
-
-- [App Classes](docs/getting-started/app-classes.md) — handle, texture, hosted, IPC
-- [XR_EXT_display_info](docs/specs/XR_EXT_display_info.md) — display properties and rendering mode extension
-- [Kooima Projection](docs/architecture/kooima-projection.md) — stereo math and projection pipelines
-- [Separation of Concerns](docs/architecture/separation-of-concerns.md) — layer boundaries
-
-## Related Repos
-
-| Repo | Description |
-|------|-------------|
-| [displayxr-unity](https://github.com/DisplayXR/displayxr-unity) | Unity engine plugin (UPM package) |
-| [displayxr-unreal](https://github.com/DisplayXR/displayxr-unreal) | Unreal Engine plugin |
-| [displayxr-extensions](https://github.com/DisplayXR/displayxr-extensions) | OpenXR extension specs and headers |
-| [kooima-projection](https://github.com/DisplayXR/kooima-projection) | Off-axis frustum projection math library |
-| [displayxr-demos](https://github.com/DisplayXR/displayxr-demos) | Demo applications |
-| [displayxr-shell](https://github.com/DisplayXR/displayxr-shell) | Spatial shell / 3D window manager |
-
-## Contributing
-
-We welcome contributions! See the [contributing guide](docs/guides/contributing.md) for workflow, code style, and CI expectations.
+| The current runtime source & docs | [DisplayXR/displayxr-runtime](https://github.com/DisplayXR/displayxr-runtime) |
+| Downloads, getting started, vendor integration | [displayxr.org](https://displayxr.org) |
+| Leia SR display-processor plug-in | [displayxr-leia-plugin](https://github.com/DisplayXR/displayxr-leia-plugin) |
+| DisplayXR Shell (spatial workspace) | [displayxr-shell-releases](https://github.com/DisplayXR/displayxr-shell-releases) |
+| OpenXR extension specs & headers | [displayxr-extensions](https://github.com/DisplayXR/displayxr-extensions) |
+| Unity / Unreal engine plugins | [displayxr-unity](https://github.com/DisplayXR/displayxr-unity) · [displayxr-unreal](https://github.com/DisplayXR/displayxr-unreal) |
+| Projection math library | [kooima-projection](https://github.com/DisplayXR/kooima-projection) |
 
 ## License
 
